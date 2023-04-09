@@ -9,7 +9,7 @@ import Navbar from "../components/Navbar";
 import Chat from "../modals/messenger/Chat";
 import SideBar from "../components/SideBar";
 import FriendsChat from "../modals/messenger/FriendsChat";
-// import { connectToSocket, disconnectFromSocket } from "../redux/socketSlice";
+
 import ChatBubble from "../cards/ChatBubble";
 
 const Home = () => {

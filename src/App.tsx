@@ -13,7 +13,7 @@ import {
   subscribeToFriendRequests,
   unsubscribeFromFriendRequests,
 } from "./redux/friendRequestSlice";
-// import { connectToSocket, disconnectFromSocket } from "./redux/socketSlice";
+
 import {
   getSeen,
   subscribeToMessages,
