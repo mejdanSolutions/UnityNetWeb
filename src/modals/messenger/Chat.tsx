@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FormEvent } from "react";
+import React, { useEffect, useState, FormEvent, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import profileDefault from "../../images/profile.jpg";
 import { IoMdSend } from "react-icons/io";
@@ -21,6 +21,33 @@ const Chat = ({ chatInfo }: Props) => {
   const messages = useAppSelector((state) => state.chat.messages);
   const chats = useAppSelector((state) => state.chat.chats);
   const [messageSent, setMessageSent] = useState(false);
+  const chatWindowRef = useRef<HTMLDivElement>(null);
+
+  const scrollChatWindow = () => {
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    // Add an event listener to the chat window to call the scroll function whenever a new message is added
+    if (chatWindowRef.current) {
+      chatWindowRef.current.addEventListener(
+        "DOMNodeInserted",
+        scrollChatWindow
+      );
+    }
+
+    return () => {
+      // Remove the event listener when the component is unmounted
+      if (chatWindowRef.current) {
+        chatWindowRef.current.removeEventListener(
+          "DOMNodeInserted",
+          scrollChatWindow
+        );
+      }
+    };
+  }, []);
 
   useEffect(() => {
     dispatch(fetchMessages(chatInfo.conversationId));
@@ -77,7 +104,10 @@ const Chat = ({ chatInfo }: Props) => {
         </button>
       </div>
 
-      <div className="p-2 h-[17rem] overflow-y-scroll flex flex-col space-y-2">
+      <div
+        ref={chatWindowRef}
+        className="p-2 h-[17rem] overflow-y-scroll flex flex-col space-y-2"
+      >
         {messages?.map((message, index) => (
           <Message
             key={message.id}
@@ -94,7 +124,12 @@ const Chat = ({ chatInfo }: Props) => {
       </div>
 
       <form
-        onSubmit={messageHandler}
+        onSubmit={(e) => messageHandler}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            messageHandler(e);
+          }
+        }}
         className="absolute bottom-0 flex items-center space-x-2 my-2"
       >
         <textarea
