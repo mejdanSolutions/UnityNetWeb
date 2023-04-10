@@ -10,7 +10,7 @@ import Post from "../cards/Post";
 import { MdOutlinePhotoCamera } from "react-icons/md";
 import AddPhoto from "../modals/photoModals/AddPhoto";
 import AllFriends from "../modals/AllFriends";
-import ProfileImageSlider from "../modals/ProfileImageSlider";
+import ImageSlider from "../modals/ImageSlider";
 import { fetchUserPosts } from "../redux/postSlice";
 import UserInfo from "../components/UserInfo";
 import Navbar from "../components/Navbar";
@@ -54,7 +54,7 @@ const Profile = () => {
     sender: 0,
   });
   const [currentReqStatus, setCurrentReqStatus] = useState(false);
-  const [profileImageOpen, setProfileImageOpen] = useState(false);
+  const [imageOpen, setImageOpen] = useState(false);
   const [openAddCoverPhoto, setOpenAddCoverPhoto] = useState(false);
   const [coverPhotoOpen, setOpenCoverPhoto] = useState(false);
 
@@ -160,10 +160,7 @@ const Profile = () => {
           />
 
           {coverPhotoOpen && userInfo.cover_image !== null && (
-            <ProfileImageSlider
-              userId={userId}
-              setProfileImageOpen={setOpenCoverPhoto}
-            />
+            <ImageSlider userId={userId} setImageOpen={setOpenCoverPhoto} />
           )}
 
           <button
@@ -183,9 +180,7 @@ const Profile = () => {
           <div className="">
             <img
               onClick={() =>
-                userInfo.image
-                  ? setProfileImageOpen(true)
-                  : setProfileImageOpen(false)
+                userInfo.image ? setImageOpen(true) : setImageOpen(false)
               }
               src={userInfo.image || profileDefault}
               alt=""
@@ -200,11 +195,8 @@ const Profile = () => {
             <MdOutlinePhotoCamera size={25} className="text-black" />
           </button>
 
-          {profileImageOpen && userInfo.image && (
-            <ProfileImageSlider
-              userId={userId}
-              setProfileImageOpen={setProfileImageOpen}
-            />
+          {imageOpen && userInfo.image && (
+            <ImageSlider userId={userId} setImageOpen={setImageOpen} />
           )}
 
           {openAddPhoto && (

@@ -49,14 +49,14 @@ const AddPhoto = ({
 
       if (updateProfilePic) {
         await axios.put(
-          `http://localhost:7000/api/users/uploadProfilePicture`,
+          `http://localhost:7000/api/photos/uploadProfilePicture`,
           data
         );
       }
 
       if (updateCoverPic) {
         await axios.put(
-          `http://localhost:7000/api/users/uploadCoverPicture`,
+          `http://localhost:7000/api/photos/uploadCoverPicture`,
           data
         );
       }
