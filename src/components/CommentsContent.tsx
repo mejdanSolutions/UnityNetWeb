@@ -68,7 +68,7 @@ const CommentsContent = ({ postId, image, userId }: Props) => {
 
   return (
     <>
-      <div className="flex space-x-2 items-center justify-between py-2 max-w-[30rem]">
+      <div className="flex space-x-2 items-center justify-between py-5 max-w-[30rem]">
         <img
           src=""
           alt=""

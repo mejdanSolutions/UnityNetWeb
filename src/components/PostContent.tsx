@@ -3,6 +3,7 @@ import UserInfo from "./UserInfo";
 import CommentsAndLikes from "./CommentsAndLikes";
 import axios from "axios";
 import Post from "../cards/Post";
+import ImageSlider from "../modals/ImageSlider";
 
 interface Props {
   postId: number;
@@ -33,6 +34,7 @@ const PostContent = ({
 }: Props) => {
   const [seeMore, setSeeMore] = useState(false);
   const [sharedPost, setSharedPost] = useState<any>({});
+  const [imageOpen, setImageOpen] = useState(false);
 
   useEffect(() => {
     if (type === "shared") {
@@ -77,7 +79,23 @@ const PostContent = ({
         )}
       </div>
 
-      {postPhoto && <img className="h-[20rem]" src={postPhoto} alt="" />}
+      {postPhoto && (
+        <div className="relative">
+          <img
+            onClick={() => setImageOpen(true)}
+            className="h-[20rem] hover:cursor-pointer w-full"
+            src={postPhoto}
+            alt=""
+          />
+          {imageOpen && (
+            <ImageSlider
+              userId={userId}
+              photoId={postId}
+              setImageOpen={setImageOpen}
+            />
+          )}
+        </div>
+      )}
 
       {type === "shared" && (
         <div className="px-2 pb-5">

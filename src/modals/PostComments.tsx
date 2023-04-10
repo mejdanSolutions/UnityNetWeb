@@ -32,14 +32,14 @@ const PostComments = ({
   setOpenLikes,
 }: Props) => {
   return (
-    <div className="fixed flex justify-center top-0 bottom-0 left-0 right-0 bg-[rgb(0,0,0,0.5)] z-20">
-      <div className="flex justify-center flex-col space-y-2 bg-white mt-20 mx-2 h-max p-5 border-b-2 border-b-blue-600 rounded-lg overflow-y-auto lg:w-[40rem] max-h-[50rem]">
+    <div className="fixed flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-[rgb(0,0,0,0.5)] z-20">
+      <div className="flex justify-center flex-col space-y-2 bg-white mx-2 h-max px-5 rounded-lg overflow-y-auto lg:w-[40rem] max-h-[50rem]">
         <button
           onClick={(e) => {
             e.stopPropagation();
             setOpenComments(false);
           }}
-          className="bg-gray-200 rounded-full flex items-center space-x-2 px-3 py-1 w-[2rem] hover:bg-gray-300"
+          className="bg-gray-200 rounded-full flex items-center space-x-2 px-3 py-1 w-[2rem] hover:bg-gray-300 my-2"
         >
           X
         </button>

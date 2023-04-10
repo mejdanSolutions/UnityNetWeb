@@ -16,23 +16,22 @@ const ImageSliderContent = ({ userId, photos }: Props) => {
   const [count, setCount] = useState(0);
   const [openComments, setOpenComments] = useState(true);
 
+  console.log(photos.length);
+
   return (
-    <div className="relative w-full mt-20">
-      <div className="bg-white text-black">
-        <div
-          id="slider"
-          className="relative h-[30rem] bg-black flex items-center"
-        >
+    <div className="overflow-y-auto lg:grid lg:grid-cols-3 lg:overflow-hidden md:h-full">
+      <div id="slider" className="lg:col-span-2">
+        <div className="bg-black h-[30rem] md:h-full">
           <img
-            src={photos[count]?.photo}
+            src={photos[0]?.photo}
             alt=""
-            className="h-[25rem] w-full border-b-2"
+            className="object-contain h-full w-full"
           />
 
-          {count !== 0 && (
+          {count > 0 && (
             <div
               id="left"
-              className="hidden absolute bg-[rgb(0,0,0,0.3)] h-full w-[5rem] hover:translate-x-[-0.5rem] transition ease-out"
+              className="hidden absolute h-full w-[5rem] hover:translate-x-[-0.5rem] transition ease-out"
             >
               <button
                 className="bg-white text-black w-[3rem] h-[3rem] flex items-center justify-center rounded-full hover:bg-gray-200"
@@ -43,10 +42,10 @@ const ImageSliderContent = ({ userId, photos }: Props) => {
             </div>
           )}
 
-          {count !== photos.length - 1 && (
+          {count < photos.length - 1 && (
             <div
               id="right"
-              className="hidden absolute right-0 bg-[rgb(0,0,0,0.3)] h-full w-[5rem] hover:translate-x-[0.5rem] transition ease-out"
+              className="hidden absolute right-0  h-full w-[5rem] hover:translate-x-[0.5rem] transition ease-out"
             >
               <button
                 className="bg-white text-black w-[3rem] h-[3rem] flex items-center justify-center rounded-full hover:bg-gray-200"
@@ -61,6 +60,9 @@ const ImageSliderContent = ({ userId, photos }: Props) => {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="bg-white lg:overflow-auto">
         <UserInfo
           userId={userId}
           firstName={photos[count]?.first_name}
@@ -81,23 +83,26 @@ const ImageSliderContent = ({ userId, photos }: Props) => {
             setOpenLikes={setOpenLikes}
           />
         </div>
+
+        {openComments && (
+          <div className="m-4">
+            {
+              <CommentsContent
+                userId={userId}
+                postId={photos[count]?.id}
+                image={photos[count]?.image}
+              />
+            }
+          </div>
+        )}
+
+        {openLikes && (
+          <UsersByLikes
+            postId={photos[count]?.id}
+            setOpenLikes={setOpenLikes}
+          />
+        )}
       </div>
-
-      {openComments && (
-        <div className="p-3 overflow-y-auto">
-          {
-            <CommentsContent
-              userId={userId}
-              postId={photos[count]?.id}
-              image={photos[count]?.image}
-            />
-          }
-        </div>
-      )}
-
-      {openLikes && (
-        <UsersByLikes postId={photos[count]?.id} setOpenLikes={setOpenLikes} />
-      )}
     </div>
   );
 };

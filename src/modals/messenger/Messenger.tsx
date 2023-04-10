@@ -48,7 +48,7 @@ const Messenger = ({ setOpenMessages }: Props) => {
     const getUserConversations = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:7000/api/users/getUserConversations`
+          `http://localhost:7000/api/messages/getUserConversations`
         );
 
         console.log(response.data, "conv");
