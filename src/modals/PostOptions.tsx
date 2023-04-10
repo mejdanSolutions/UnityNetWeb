@@ -6,7 +6,6 @@ import {
   fetchPostComments,
   fetchPosts,
   fetchUserPosts,
-  postActions,
 } from "../redux/postSlice";
 
 interface Props {
@@ -37,7 +36,6 @@ const PostOptions = ({ setOpenOptions, postId, userId, commentId }: Props) => {
       );
 
       dispatch(fetchPostComments(postId));
-      dispatch(postActions.setPostCommentDeleted(true));
     } catch (err) {}
   };
 

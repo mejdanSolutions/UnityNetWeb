@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Count } from "../types/types";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import axios from "axios";
-import { getPostCommentsCount } from "../services/services";
-import { postActions } from "../redux/postSlice";
 import { AiFillHeart } from "react-icons/ai";
 import { VscComment } from "react-icons/vsc";
 import { BsShare } from "react-icons/bs";
@@ -27,16 +24,11 @@ const CommentsAndLikes = ({
   const [openSharePost, setOpenSharePost] = useState(false);
   const [liked, setLiked] = useState(false);
   const dispatch = useAppDispatch();
-  const postCommentDeleted = useAppSelector(
-    (state) => state.post.postCommentDeleted
-  );
-  const [count, setCount] = useState<Count>({
-    comments: 0,
-    likes: 0,
-  });
+  const [commentsCount, setCommentsCount] = useState(0);
+  const [likesCount, setLikesCount] = useState(0);
   const [shared, setShared] = useState(false);
-  const postCommented = useAppSelector((state) => state.post.postCommented);
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
+  const postComments = useAppSelector((state) => state.post.postComments);
 
   useEffect(() => {
     const isPostShared = async () => {
@@ -94,14 +86,36 @@ const CommentsAndLikes = ({
   };
 
   useEffect(() => {
-    const getCommAndLikesCount = async () => {
-      let data = await getPostCommentsCount(postId);
-      dispatch(postActions.setPostCommentDeleted(false));
-      dispatch(postActions.setPostCommented(false));
-      setCount(data);
+    const getPostCommentsCount = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:7000/api/posts/getPostCommentsCount/${postId}`
+        );
+
+        setCommentsCount(response.data.comment_count);
+      } catch (err) {
+        console.log(err);
+      }
     };
-    getCommAndLikesCount();
-  }, [liked, postCommentDeleted, postCommented]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    getPostCommentsCount();
+  }, [postComments]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const getPostLikesCount = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:7000/api/posts/getPostLikesCount/${postId}`
+        );
+
+        setLikesCount(response.data.likes_count);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getPostLikesCount();
+  }, [postId, liked]);
 
   return (
     <div className="flex items-center space-x-2 mt-2">
@@ -116,8 +130,8 @@ const CommentsAndLikes = ({
         onClick={() => setOpenLikes(true)}
         className="flex space-x-1 hover:text-blue-500"
       >
-        <span>{count.likes}</span>
-        <span>{count.likes > 1 ? "Likes" : "Like"}</span>
+        <span>{likesCount}</span>
+        <span>{likesCount > 1 ? "Likes" : "Like"}</span>
       </button>
 
       <VscComment size={25} />
@@ -129,8 +143,8 @@ const CommentsAndLikes = ({
         }}
         className="flex space-x-1 hover:text-blue-500"
       >
-        <span>{count.comments}</span>
-        <span>Comments</span>
+        <span>{commentsCount}</span>
+        <span>{commentsCount > 1 ? "Comments" : "Comment"}</span>
       </button>
 
       <div className="flex items-center space-x-2">
