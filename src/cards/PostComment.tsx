@@ -7,7 +7,6 @@ import { getUserInfo } from "../services/services";
 import { Link } from "react-router-dom";
 import PostOptions from "../modals/PostOptions";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { postActions } from "../redux/postSlice";
 import {
   createNotification,
   sendNotification,
@@ -34,9 +33,6 @@ const PostComment = ({ userId, postId, commentId, comment }: Props) => {
   });
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState<Count>({ likes: 0 });
-  const commentDeleted = useAppSelector(
-    (state) => state.post.postCommentDeleted
-  );
   const dispatch = useAppDispatch();
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
 
@@ -92,13 +88,11 @@ const PostComment = ({ userId, postId, commentId, comment }: Props) => {
           `http://localhost:7000/api/comments/getCommentLikesCount/${commentId}`
         );
         setCount(response.data);
-
-        dispatch(postActions.setPostCommentDeleted(false));
       } catch (err) {}
     };
 
     getPostCommentLikesCount();
-  }, [commentId, liked, commentDeleted, dispatch]);
+  }, [commentId, liked, dispatch]);
 
   useEffect(() => {
     const getInfo = async () => {

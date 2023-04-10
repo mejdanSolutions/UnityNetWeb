@@ -15,8 +15,6 @@ interface InitialState {
   post: Post;
   userPosts: Post[];
   postComments: IPostComment[];
-  postCommentDeleted: boolean;
-  postCommented: boolean;
 }
 
 const initialState: InitialState = {
@@ -35,8 +33,6 @@ const initialState: InitialState = {
   },
   userPosts: [],
   postComments: [],
-  postCommentDeleted: false,
-  postCommented: false,
 };
 
 export const fetchPostComments = createAsyncThunk(
@@ -95,14 +91,7 @@ export const fetchPosts = createAsyncThunk("post/fetchPosts", async () => {
 const postSlice = createSlice({
   name: "post",
   initialState,
-  reducers: {
-    setPostCommentDeleted(state, action) {
-      state.postCommentDeleted = action.payload;
-    },
-    setPostCommented(state, action) {
-      state.postCommented = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(
       fetchPosts.fulfilled,

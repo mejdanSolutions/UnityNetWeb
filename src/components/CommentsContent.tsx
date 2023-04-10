@@ -5,7 +5,6 @@ import { useAppSelector } from "../redux/hooks";
 import { useAppDispatch } from "../redux/hooks";
 import { fetchPostComments } from "../redux/postSlice";
 import axios from "axios";
-import { postActions } from "../redux/postSlice";
 import {
   createNotification,
   sendNotification,
@@ -64,7 +63,6 @@ const CommentsContent = ({ postId, image, userId }: Props) => {
 
       setComment("");
       dispatch(fetchPostComments(postId));
-      dispatch(postActions.setPostCommented(true));
     } catch (err) {}
   };
 
