@@ -3,6 +3,11 @@ import axios from "axios";
 import { IPost } from "../types/types";
 import { IPostComment } from "../types/types";
 
+interface UserPostsArgs {
+  userId: number;
+  page?: number;
+}
+
 interface Post extends IPost {
   user_id: number;
   first_name: string;
@@ -63,10 +68,10 @@ export const fetchPost = createAsyncThunk(
 
 export const fetchUserPosts = createAsyncThunk(
   "post/fetchUsersPosts",
-  async (id: number) => {
+  async ({ userId, page }: UserPostsArgs) => {
     try {
       const response = await axios.get(
-        `http://localhost:7000/api/posts/getUserPosts/${id}`
+        `http://localhost:7000/api/posts/getUserPosts/${userId}/${page}`
       );
 
       return response.data;
@@ -76,36 +81,72 @@ export const fetchUserPosts = createAsyncThunk(
   }
 );
 
-export const fetchPosts = createAsyncThunk("post/fetchPosts", async () => {
-  try {
-    const response = await axios.get(
-      `http://localhost:7000/api/posts/getPosts`
-    );
+export const fetchPosts = createAsyncThunk(
+  "post/fetchPosts",
+  async (page: number) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:7000/api/posts/getPosts/${page}`
+      );
 
-    return response.data;
-  } catch (error) {
-    console.log(error);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 const postSlice = createSlice({
   name: "post",
   initialState,
-  reducers: {},
+  reducers: {
+    deletePost(state, action) {
+      let filteredPosts = state.posts.filter(
+        (post) => post.id !== action.payload
+      );
+      state.posts = filteredPosts;
+
+      console.log("redux", state.posts);
+
+      let filteredUserPosts = state.userPosts.filter(
+        (post) => post.id !== action.payload.id
+      );
+
+      state.userPosts = filteredUserPosts;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(
       fetchPosts.fulfilled,
       (state, action: PayloadAction<Post[]>) => {
-        state.posts = action.payload.sort(
-          (a: any, b: any) => b.created_at - a.created_at
-        );
+        let fetchedPosts = action.payload;
+
+        fetchedPosts.forEach((fetchedPost) => {
+          const index = state.posts.findIndex(
+            (post) => post.id === fetchedPost.id
+          );
+
+          if (index === -1) {
+            state.posts.push(fetchedPost);
+          }
+        });
       }
     );
 
     builder.addCase(
       fetchUserPosts.fulfilled,
       (state, action: PayloadAction<Post[]>) => {
-        state.userPosts = action.payload;
+        let fetchedPosts = action.payload;
+
+        fetchedPosts.forEach((fetchedPost) => {
+          const index = state.userPosts.findIndex(
+            (post) => post.id === fetchedPost.id
+          );
+
+          if (index === -1) {
+            state.userPosts.push(fetchedPost);
+          }
+        });
       }
     );
 
@@ -117,7 +158,6 @@ const postSlice = createSlice({
     );
     builder.addCase(fetchPost.fulfilled, (state, action) => {
       state.post = action.payload;
-      console.log(state.post);
     });
   },
 });

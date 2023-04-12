@@ -66,7 +66,7 @@ const AddPhoto = ({
       }
 
       setOpenAddPhoto(false);
-      dispatch(fetchPosts());
+      dispatch(fetchPosts(1));
     } catch (err) {
       console.log(err);
     }

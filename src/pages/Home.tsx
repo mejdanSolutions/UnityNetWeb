@@ -13,6 +13,7 @@ import FriendsChat from "../modals/messenger/FriendsChat";
 import ChatBubble from "../cards/ChatBubble";
 
 const Home = () => {
+  const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   const posts = useAppSelector((state) => state.post.posts);
@@ -20,8 +21,21 @@ const Home = () => {
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
 
   useEffect(() => {
-    dispatch(fetchPosts());
-  }, [dispatch]);
+    dispatch(fetchPosts(page));
+  }, [dispatch, page]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
+        setPage(page + 1);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [page]);
 
   return (
     <>
