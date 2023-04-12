@@ -147,20 +147,24 @@ const Profile = () => {
     <>
       <Navbar />
       <section className="max-w-5xl mx-auto shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-gray-100">
-        <div className="relative h-[13rem] md:h-[20rem]">
+        <div className="relative h-[13rem] md:h-[20rem] lg:h-[30rem]">
           <img
             onClick={() => {
               userInfo.cover_image
                 ? setOpenCoverPhoto(true)
                 : setOpenCoverPhoto(false);
             }}
-            src={""}
+            src={userInfo.cover_image}
             alt=""
             className="h-full w-full hover:cursor-pointer"
           />
 
           {coverPhotoOpen && userInfo.cover_image !== null && (
-            <ImageSlider userId={userId} setImageOpen={setOpenCoverPhoto} />
+            <ImageSlider
+              userId={userId}
+              setImageOpen={setOpenCoverPhoto}
+              type={"cover"}
+            />
           )}
 
           <button
@@ -196,7 +200,11 @@ const Profile = () => {
           </button>
 
           {imageOpen && userInfo.image && (
-            <ImageSlider userId={userId} setImageOpen={setImageOpen} />
+            <ImageSlider
+              userId={userId}
+              setImageOpen={setImageOpen}
+              type={"profile"}
+            />
           )}
 
           {openAddPhoto && (
@@ -270,13 +278,13 @@ const Profile = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2">
-          <div className="w-full">
+          <div className="w-full mt-6">
             <ProfileInfo />
 
             <ProfileFriends friendStatus={friendStatus} userId={userId} />
           </div>
 
-          <div className="mx-2">
+          <div className="">
             {posts.length === 0 && (
               <span className="text-center text-blue-600">
                 There is no existing posts

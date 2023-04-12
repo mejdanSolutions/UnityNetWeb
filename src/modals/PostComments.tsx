@@ -33,7 +33,7 @@ const PostComments = ({
 }: Props) => {
   return (
     <div className="fixed flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-[rgb(0,0,0,0.5)] z-20">
-      <div className="flex justify-center flex-col space-y-2 bg-white mx-2 h-max px-5 rounded-lg overflow-y-auto lg:w-[40rem] max-h-[50rem]">
+      <div className="flex justify-center flex-col space-y-2 bg-white mx-2 h-max px-5 rounded-lg overflow-y-auto lg:w-[40rem] max-h-[60rem]">
         <button
           onClick={(e) => {
             e.stopPropagation();
