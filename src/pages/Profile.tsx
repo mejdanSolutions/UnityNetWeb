@@ -36,6 +36,7 @@ interface IUser extends User {
 }
 
 const Profile = () => {
+  const [page, setPage] = useState(1);
   const dispatch = useAppDispatch();
   const [openAddPhoto, setOpenAddPhoto] = useState(false);
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
@@ -67,6 +68,19 @@ const Profile = () => {
   //   } catch (err) {}
   // };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
+        setPage(page + 1);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [page]);
+
   const acceptRequestHandler = async () => {
     try {
       await axios.get(
@@ -79,8 +93,8 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchUserPosts(userId));
-  }, [dispatch, userId]);
+    dispatch(fetchUserPosts({ userId, page }));
+  }, [page]);
 
   useEffect(() => {
     const getFriendReqStatus = async () => {

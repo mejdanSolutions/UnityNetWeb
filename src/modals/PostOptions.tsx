@@ -2,11 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { useAppDispatch } from "../redux/hooks";
-import {
-  fetchPostComments,
-  fetchPosts,
-  fetchUserPosts,
-} from "../redux/postSlice";
+import { fetchPostComments, postActions } from "../redux/postSlice";
 
 interface Props {
   setOpenOptions: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,8 +20,7 @@ const PostOptions = ({ setOpenOptions, postId, userId, commentId }: Props) => {
         `http://localhost:7000/api/posts/deletePost/${postId}`
       );
 
-      dispatch(fetchPosts());
-      dispatch(fetchUserPosts(userId));
+      dispatch(postActions.deletePost(postId));
     } catch (err) {}
   };
 

@@ -32,7 +32,7 @@ const CreatePost = ({ setOpen }: Props) => {
     try {
       await axios.post(`http://localhost:7000/api/posts/createPost`, formData);
 
-      dispatch(fetchPosts());
+      dispatch(fetchPosts(1));
       setOpen(false);
     } catch (err) {
       console.log(err);
