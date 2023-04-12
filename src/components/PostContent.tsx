@@ -92,6 +92,7 @@ const PostContent = ({
               userId={userId}
               photoId={postId}
               setImageOpen={setImageOpen}
+              type={"post"}
             />
           )}
         </div>

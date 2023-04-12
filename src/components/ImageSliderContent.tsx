@@ -21,17 +21,17 @@ const ImageSliderContent = ({ userId, photos }: Props) => {
   return (
     <div className="overflow-y-auto lg:grid lg:grid-cols-3 lg:overflow-hidden md:h-full">
       <div id="slider" className="lg:col-span-2">
-        <div className="bg-black h-[30rem] md:h-full">
+        <div className="relative bg-black h-[30rem] md:h-full flex items-center">
           <img
-            src={photos[0]?.photo}
+            src={photos[count]?.photo}
             alt=""
-            className="object-contain h-full w-full"
+            className="object-contain w-full h-full max-h-[50rem]"
           />
 
           {count > 0 && (
             <div
               id="left"
-              className="hidden absolute h-full w-[5rem] hover:translate-x-[-0.5rem] transition ease-out"
+              className="absolute h-full left-4 top-[50%] w-[5rem] hover:translate-x-[-0.5rem] transition ease-out"
             >
               <button
                 className="bg-white text-black w-[3rem] h-[3rem] flex items-center justify-center rounded-full hover:bg-gray-200"
@@ -45,7 +45,7 @@ const ImageSliderContent = ({ userId, photos }: Props) => {
           {count < photos.length - 1 && (
             <div
               id="right"
-              className="hidden absolute right-0  h-full w-[5rem] hover:translate-x-[0.5rem] transition ease-out"
+              className="absolute right-0 top-[50%]  h-full w-[5rem] hover:translate-x-[0.5rem] transition ease-out"
             >
               <button
                 className="bg-white text-black w-[3rem] h-[3rem] flex items-center justify-center rounded-full hover:bg-gray-200"
@@ -85,7 +85,7 @@ const ImageSliderContent = ({ userId, photos }: Props) => {
         </div>
 
         {openComments && (
-          <div className="m-4">
+          <div className="m-4 overflow-y-auto h-[40rem] my-4">
             {
               <CommentsContent
                 userId={userId}

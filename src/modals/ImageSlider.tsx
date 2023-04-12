@@ -8,9 +8,10 @@ interface Props {
   userId: number;
   setImageOpen: React.Dispatch<React.SetStateAction<boolean>>;
   photoId?: number;
+  type: string;
 }
 
-const ImageSlider = ({ userId, setImageOpen, photoId }: Props) => {
+const ImageSlider = ({ userId, setImageOpen, photoId, type }: Props) => {
   const [photos, setPhotos] = useState<any[]>([]);
 
   console.log(userId);
@@ -19,19 +20,25 @@ const ImageSlider = ({ userId, setImageOpen, photoId }: Props) => {
   useEffect(() => {
     const getPhotos = async () => {
       try {
-        if (photoId) {
+        if (photoId && type === "post") {
           const response = await axios.get(
             `http://localhost:7000/api/photos/getPhoto/${userId}/${photoId}`
           );
-          console.log(response.data);
+
           setPhotos(response.data);
         }
 
-        if (!photoId) {
+        if (type === "profile") {
           const response = await axios.get(
             `http://localhost:7000/api/photos/getUserProfilePhotos/${userId}`
           );
+          setPhotos(response.data);
+        }
 
+        if (type === "cover") {
+          const response = await axios.get(
+            `http://localhost:7000/api/photos/getUserCoverPhotos/${userId}`
+          );
           setPhotos(response.data);
         }
       } catch (err) {
@@ -40,7 +47,7 @@ const ImageSlider = ({ userId, setImageOpen, photoId }: Props) => {
     };
 
     getPhotos();
-  }, [userId, photoId]);
+  }, [userId, photoId, type]);
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 z-30 bg-white">
