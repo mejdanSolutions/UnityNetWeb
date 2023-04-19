@@ -102,9 +102,9 @@ const Navbar = () => {
   }, [searchTerm]);
 
   return (
-    <div className="flex items-center justify-between bg-blue-600 text-white p-3">
+    <div className="flex items-center justify-between border bg-white text-white p-3">
       <div className="relative flex items-center space-x-2">
-        <Link className="text-2xl font-bold" to="/home">
+        <Link className="text-2xl text-blue-500 font-bold" to="/home">
           UN
         </Link>
 
@@ -116,7 +116,7 @@ const Navbar = () => {
           value={searchTerm}
           onChange={handleInputChange}
           type="text"
-          className="w-[10rem] rounded-full focus:outline-none text-black px-2 py-[0.3rem] md:w-[15rem]"
+          className="w-[10rem] bg-gray-100 rounded-full focus:outline-none text-black px-2 py-[0.5rem] md:w-[15rem]"
           placeholder="search social media"
         />
 
@@ -154,12 +154,13 @@ const Navbar = () => {
       <div className="relative flex items-center space-x-2">
         <div className="relative">
           <button
+            className="bg-gray-200 w-[2.5rem] h-[2.5rem] flex items-center justify-center rounded-full hover:bg-gray-300"
             onClick={(e) => {
               e.stopPropagation();
               setOpenNotification((prev) => !prev);
             }}
           >
-            <IoIosNotifications size={25} />
+            <IoIosNotifications size={25} className="text-blue-500" />
           </button>
 
           {notificationsCount !== 0 && (
@@ -173,12 +174,13 @@ const Navbar = () => {
 
         <div className="relative">
           <button
+            className="bg-gray-200 w-[2.5rem] h-[2.5rem] flex items-center justify-center rounded-full hover:bg-gray-300"
             onClick={(e) => {
               e.stopPropagation();
               setReqOpen((prev) => !prev);
             }}
           >
-            <FaUserFriends size={25} />
+            <FaUserFriends size={22} className="text-blue-500" />
           </button>
 
           {requestsCount !== 0 && (
@@ -191,8 +193,11 @@ const Navbar = () => {
         </div>
 
         <div className="relative">
-          <button onClick={() => setOpenMessages((prev) => !prev)}>
-            <BsMessenger size={20} />
+          <button
+            className="bg-gray-200 w-[2.5rem] h-[2.5rem] flex items-center justify-center rounded-full hover:bg-gray-300"
+            onClick={() => setOpenMessages((prev) => !prev)}
+          >
+            <BsMessenger size={19} className="text-blue-500" />
           </button>
 
           {messagesOpen && <Messenger setOpenMessages={setOpenMessages} />}
@@ -206,7 +211,7 @@ const Navbar = () => {
             }}
             src={loggedUserInfo.image || profileDefault}
             alt=""
-            className="w-[2.2rem] h-[2rem] border-2 rounded-[100%] hover:cursor-pointer"
+            className="w-[2.5rem] h-[2.5rem] border-2 rounded-[100%] hover:cursor-pointer"
           />
 
           {profileOpen && <Profile setProfileOpen={setProfileOpen} />}

@@ -40,14 +40,14 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <section className="relative grid px-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <section className="relative grid px-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 bg-gray-100">
         <SideBar />
 
         {open && <CreatePost setOpen={setOpen} />}
-        <main className="my-2 mx-auto max-w-[25rem] md:w-[30rem] md:max-w-[30rem]">
+        <main className="my-2 mx-auto max-w-[25rem] md:w-[33rem] md:max-w-[33rem]">
           <div
             onClick={() => setOpen(true)}
-            className="flex items-center space-x-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-4 mt-5 rounded-lg w-full"
+            className="flex items-center space-x-2 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-4 mt-5 rounded-lg w-full"
           >
             <Link to={`/profile/${loggedUserInfo.id}`}>
               <img
