@@ -41,25 +41,27 @@ const CommentsContent = ({ postId, image, userId }: Props) => {
         data
       );
 
-      dispatch(
-        sendNotification({
-          id: loggedUserInfo.id,
-          first_name: loggedUserInfo.first_name,
-          last_name: loggedUserInfo.last_name,
-          image: loggedUserInfo.image,
-          type: "comment",
-          created_at: new Date(),
-          receiver_id: userId,
-          post_id: postId,
-        })
-      );
-      dispatch(
-        createNotification({
-          receiverId: userId,
-          type: "comment",
-          postId: postId,
-        })
-      );
+      if (loggedUserInfo.id !== userId) {
+        dispatch(
+          sendNotification({
+            id: loggedUserInfo.id,
+            first_name: loggedUserInfo.first_name,
+            last_name: loggedUserInfo.last_name,
+            image: loggedUserInfo.image,
+            type: "comment",
+            created_at: new Date(),
+            receiver_id: userId,
+            post_id: postId,
+          })
+        );
+        dispatch(
+          createNotification({
+            receiverId: userId,
+            type: "comment",
+            postId: postId,
+          })
+        );
+      }
 
       setComment("");
       dispatch(fetchPostComments(postId));
