@@ -82,10 +82,10 @@ const PostContent = ({
       </div>
 
       {postPhoto && (
-        <div className="relative">
+        <div className="relative bg-black">
           <img
             onClick={() => setImageOpen(true)}
-            className="h-[20rem] hover:cursor-pointer w-full"
+            className="h-[38rem] hover:cursor-pointer w-full object-contain"
             src={postPhoto}
             alt=""
           />
