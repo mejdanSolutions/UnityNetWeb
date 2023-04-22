@@ -9,12 +9,7 @@ import Navbar from "../components/Navbar";
 import Chat from "../modals/messenger/Chat";
 import SideBar from "../components/SideBar";
 import FriendsChat from "../modals/messenger/FriendsChat";
-
 import ChatBubble from "../cards/ChatBubble";
-import {
-  getNotifications,
-  getNotificationsCount,
-} from "../redux/notificationSlice";
 
 const Home = () => {
   const [page, setPage] = useState(1);
@@ -23,17 +18,6 @@ const Home = () => {
   const posts = useAppSelector((state) => state.post.posts);
   const chats = useAppSelector((state) => state.chat.chats);
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
-  const notifications = useAppSelector(
-    (state) => state.notification.notifications
-  );
-
-  useEffect(() => {
-    dispatch(getNotifications());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getNotificationsCount());
-  }, [dispatch, notifications]);
 
   useEffect(() => {
     dispatch(fetchPosts(page));
