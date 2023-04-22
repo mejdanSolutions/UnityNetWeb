@@ -1,19 +1,11 @@
-import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { getNotifications } from "../redux/notificationSlice";
+import React from "react";
+import { useAppSelector } from "../redux/hooks";
 import Notification from "../cards/Notification";
 
 const Notifications = () => {
-  const dispatch = useAppDispatch();
   const notifications = useAppSelector(
     (state) => state.notification.notifications
   );
-
-  console.log(notifications);
-
-  useEffect(() => {
-    dispatch(getNotifications());
-  }, [dispatch]);
 
   return (
     <div className="absolute right-[-3rem] top-[3.2rem] bg-white text-black shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-md p-2 z-20">

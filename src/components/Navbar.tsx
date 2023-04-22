@@ -34,8 +34,8 @@ const Navbar = () => {
   const [openNotification, setOpenNotification] = useState(false);
   const requestsCount = useAppSelector((state) => state.request.requestCount);
   const notificationsCount = useAppSelector(
-    (state) => state.notification.notifications
-  ).length;
+    (state) => state.notification.notificationCount
+  );
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<User[]>([]);
