@@ -17,6 +17,7 @@ interface Props {
   type: string | null;
   setOpenComments: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenLikes: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenShares: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PostContent = ({
@@ -30,6 +31,7 @@ const PostContent = ({
   postPhoto,
   setOpenComments,
   setOpenLikes,
+  setOpenShares,
   type,
 }: Props) => {
   const [seeMore, setSeeMore] = useState(false);
@@ -120,6 +122,7 @@ const PostContent = ({
           postId={postId}
           setOpenComments={setOpenComments}
           setOpenLikes={setOpenLikes}
+          setOpenShares={setOpenShares}
         />
       </div>
     </div>

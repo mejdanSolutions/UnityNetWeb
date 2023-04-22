@@ -5,6 +5,7 @@ import UserInfo from "./UserInfo";
 import UsersByLikes from "../modals/UsersByLikes";
 import CommentsAndLikes from "./CommentsAndLikes";
 import CommentsContent from "./CommentsContent";
+import UsersByShares from "../modals/UsersByShares";
 
 interface Props {
   photos: any[];
@@ -15,6 +16,7 @@ const ImageSliderContent = ({ userId, photos }: Props) => {
   const [openLikes, setOpenLikes] = useState(false);
   const [count, setCount] = useState(0);
   const [openComments, setOpenComments] = useState(true);
+  const [openShares, setOpenShares] = useState(false);
 
   console.log(photos.length);
 
@@ -81,6 +83,7 @@ const ImageSliderContent = ({ userId, photos }: Props) => {
             postId={photos[count]?.id}
             setOpenComments={setOpenComments}
             setOpenLikes={setOpenLikes}
+            setOpenShares={setOpenShares}
           />
         </div>
 
@@ -100,6 +103,13 @@ const ImageSliderContent = ({ userId, photos }: Props) => {
           <UsersByLikes
             postId={photos[count]?.id}
             setOpenLikes={setOpenLikes}
+          />
+        )}
+
+        {openShares && (
+          <UsersByShares
+            postId={photos[count]?.id}
+            setOpenShares={setOpenShares}
           />
         )}
       </div>

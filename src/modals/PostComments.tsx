@@ -15,6 +15,7 @@ interface Props {
   type: string | null;
   setOpenComments: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenLikes: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenShares: React.Dispatch<React.SetStateAction<boolean>>;
   // getCommAndLikesCount: () => void;
 }
 
@@ -30,6 +31,7 @@ const PostComments = ({
   type,
   setOpenComments,
   setOpenLikes,
+  setOpenShares,
 }: Props) => {
   return (
     <div className="fixed flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-[rgb(0,0,0,0.5)] z-20">
@@ -55,6 +57,7 @@ const PostComments = ({
           createdAt={createdAt}
           setOpenLikes={setOpenLikes}
           setOpenComments={setOpenComments}
+          setOpenShares={setOpenShares}
           type={type}
         />
 

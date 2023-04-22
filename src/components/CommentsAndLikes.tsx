@@ -13,12 +13,14 @@ interface Props {
   postId: number;
   setOpenLikes: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenComments: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenShares: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CommentsAndLikes = ({
   postId,
   setOpenLikes,
   setOpenComments,
+  setOpenShares,
   userId,
 }: Props) => {
   const [openSharePost, setOpenSharePost] = useState(false);
@@ -170,7 +172,10 @@ const CommentsAndLikes = ({
           <BsShare />
         </button>
 
-        <button className="flex space-x-1 hover:text-blue-500">
+        <button
+          onClick={() => setOpenShares(true)}
+          className="flex space-x-1 hover:text-blue-500"
+        >
           <span>{sharesCount}</span>
           <span>{sharesCount > 1 ? "Shares" : "Share"}</span>
         </button>

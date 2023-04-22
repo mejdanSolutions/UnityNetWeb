@@ -5,10 +5,10 @@ import { User } from "../types/types";
 
 interface Props {
   postId: number;
-  setOpenLikes: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenShares: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const UsersByLikes = ({ postId, setOpenLikes }: Props) => {
+const UsersByShares = ({ postId, setOpenShares }: Props) => {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
@@ -29,9 +29,9 @@ const UsersByLikes = ({ postId, setOpenLikes }: Props) => {
     <div className="flex items-center justify-center fixed top-0 bottom-0 left-0 right-0 bg-[rgb(0,0,0,0.5)] z-20">
       <div className="bg-white w-[19rem] h-[20rem] p-3 rounded-md">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-bold">Users who liked this post</h2>
+          <h2 className="font-bold">Users who shared this post</h2>
           <button
-            onClick={() => setOpenLikes(false)}
+            onClick={() => setOpenShares(false)}
             className="font-bold bg-gray-200 rounded-full w-[2rem] h-[2rem] hover:bg-gray-300"
           >
             X
@@ -61,4 +61,4 @@ const UsersByLikes = ({ postId, setOpenLikes }: Props) => {
   );
 };
 
-export default UsersByLikes;
+export default UsersByShares;
