@@ -15,7 +15,7 @@ const UsersByShares = ({ postId, setOpenShares }: Props) => {
     const getUsers = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:7000/api/users/getUsersByLikes/${postId}`
+          `http://localhost:7000/api/users/getUsersByShares/${postId}`
         );
 
         setUsers(response.data);
