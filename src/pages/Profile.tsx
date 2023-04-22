@@ -7,16 +7,14 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { GrFormCheckmark } from "react-icons/gr";
 // import { IPost } from "../types/types";
 import Post from "../cards/Post";
-import { MdOutlinePhotoCamera } from "react-icons/md";
-import AddPhoto from "../modals/photoModals/AddPhoto";
-import AllFriends from "../modals/AllFriends";
-import ImageSlider from "../modals/ImageSlider";
+
 import { fetchUserPosts } from "../redux/postSlice";
 import UserInfo from "../components/UserInfo";
 import Navbar from "../components/Navbar";
 import { sendFriendRequest } from "../redux/friendRequestSlice";
 import ProfileInfo from "../components/ProfileInfo";
 import ProfileFriends from "../components/ProfileFriends";
+import ProfileHeader from "../components/ProfileHeader";
 const profileDefault = require("../images/profile.jpg");
 
 // interface IUPost extends IPost {
@@ -38,7 +36,6 @@ interface IUser extends User {
 const Profile = () => {
   const [page, setPage] = useState(1);
   const dispatch = useAppDispatch();
-  const [openAddPhoto, setOpenAddPhoto] = useState(false);
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
   const [userInfo, setUserInfo] = useState<IUser>({
     id: 0,
@@ -56,11 +53,7 @@ const Profile = () => {
     sender: 0,
   });
 
-  console.log(friendReqStatus);
-
-  const [imageOpen, setImageOpen] = useState(false);
-  const [openAddCoverPhoto, setOpenAddCoverPhoto] = useState(false);
-  const [coverPhotoOpen, setOpenCoverPhoto] = useState(false);
+  console.log(friendStatus);
 
   const { id } = useParams();
 
@@ -134,7 +127,7 @@ const Profile = () => {
     };
 
     getFriendStatus();
-  }, [userId]);
+  }, [userId, userInfo]);
 
   const friendRequestHandler = async () => {
     dispatch(sendFriendRequest({ request: 1, receiverId: userInfo.id }));
@@ -164,74 +157,7 @@ const Profile = () => {
     <>
       <Navbar />
       <section className="max-w-5xl mx-auto shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-gray-100">
-        <div className="relative h-[13rem] md:h-[20rem] lg:h-[30rem]">
-          <img
-            onClick={() => {
-              userInfo.cover_image
-                ? setOpenCoverPhoto(true)
-                : setOpenCoverPhoto(false);
-            }}
-            src={userInfo.cover_image}
-            alt=""
-            className="h-full w-full hover:cursor-pointer"
-          />
-
-          {coverPhotoOpen && userInfo.cover_image !== null && (
-            <ImageSlider
-              userId={userId}
-              setImageOpen={setOpenCoverPhoto}
-              type={"cover"}
-            />
-          )}
-
-          <button
-            onClick={() => setOpenAddCoverPhoto(true)}
-            className="absolute right-2 bottom-2 bg-white border-2 w-[3rem] rounded-md h-[2.5rem] flex items-center justify-center hover:bg-gray-200"
-          >
-            <MdOutlinePhotoCamera size={25} className="text-black" />
-          </button>
-
-          {openAddCoverPhoto && (
-            <AddPhoto
-              updateCoverPic={true}
-              setOpenAddPhoto={setOpenAddCoverPhoto}
-            />
-          )}
-
-          <div className="">
-            <img
-              onClick={() =>
-                userInfo.image ? setImageOpen(true) : setImageOpen(false)
-              }
-              src={userInfo.image || profileDefault}
-              alt=""
-              className="absolute bottom-[-4rem] left-2 border-2 h-[8rem] w-[8rem] rounded-full hover:cursor-pointer"
-            />
-          </div>
-
-          <button
-            onClick={() => setOpenAddPhoto(true)}
-            className="relative left-[7rem] bottom-[-1rem] bg-white border-2 w-[2.5rem] rounded-full h-[2.5rem] flex items-center justify-center hover:bg-gray-200"
-          >
-            <MdOutlinePhotoCamera size={25} className="text-black" />
-          </button>
-
-          {imageOpen && userInfo.image && (
-            <ImageSlider
-              userId={userId}
-              setImageOpen={setImageOpen}
-              type={"profile"}
-            />
-          )}
-
-          {openAddPhoto && (
-            <AddPhoto
-              updateProfilePic={true}
-              setOpenAddPhoto={setOpenAddPhoto}
-            />
-          )}
-        </div>
-
+        <ProfileHeader userInfo={userInfo} />
         <div className="my-4 mt-20 ml-3 w-max text-center">
           <h2 className="text-2xl font-bold">
             {userInfo.first_name} {userInfo.last_name}
@@ -293,7 +219,6 @@ const Profile = () => {
               )}
           </div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2">
           <div className="w-full mt-6">
             <ProfileInfo />

@@ -30,6 +30,7 @@ export interface User {
   first_name: string;
   last_name: string;
   image: string;
+  cover_image?: string | null;
 }
 
 export interface Conversation {
