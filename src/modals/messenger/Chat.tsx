@@ -124,7 +124,7 @@ const Chat = ({ chatInfo }: Props) => {
       </div>
 
       <form
-        onSubmit={(e) => messageHandler}
+        onSubmit={(e) => messageHandler(e)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             messageHandler(e);
