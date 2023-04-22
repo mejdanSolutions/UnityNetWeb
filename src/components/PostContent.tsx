@@ -124,6 +124,7 @@ const PostContent = ({
           setOpenLikes={setOpenLikes}
           setOpenShares={setOpenShares}
           type={type}
+          sharedPostId={sharedPost.id}
         />
       </div>
     </div>
