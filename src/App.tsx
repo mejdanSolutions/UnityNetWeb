@@ -9,7 +9,7 @@ import { addUser, authActions } from "./redux/authSlice";
 import Profile from "./pages/Profile";
 import { getLoggedUserInfo } from "./redux/authSlice";
 import {
-  getFriendRequestsCount,
+  getFriendRequests,
   subscribeToFriendRequests,
   unsubscribeFromFriendRequests,
 } from "./redux/friendRequestSlice";
@@ -22,6 +22,8 @@ import {
 } from "./redux/chatSlice";
 import socket, { onLoginSuccess } from "./services/socket";
 import {
+  getNotifications,
+  getNotificationsCount,
   subscribeToNotifications,
   unsubscribeFromNotifications,
 } from "./redux/notificationSlice";
@@ -34,16 +36,27 @@ function App() {
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
   const messages = useAppSelector((state) => state.chat.messages);
-
-  useEffect(() => {
-    dispatch(getFriendRequestsCount());
-  }, [dispatch]);
+  const notifications = useAppSelector(
+    (state) => state.notification.notifications
+  );
+  const requests = useAppSelector((state) => state.request.requests);
 
   // useEffect(() => {
   //   dispatch(getSeen());
 
   //   return () => dispatch(unsubscribeFromSeen());
   // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getFriendRequests());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getNotifications());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getNotificationsCount());
+  }, [dispatch, notifications]);
 
   useEffect(() => {
     dispatch(addUser(loggedUserInfo.id));
