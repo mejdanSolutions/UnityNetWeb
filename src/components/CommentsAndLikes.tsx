@@ -26,6 +26,7 @@ const CommentsAndLikes = ({
   const dispatch = useAppDispatch();
   const [commentsCount, setCommentsCount] = useState(0);
   const [likesCount, setLikesCount] = useState(0);
+  const [sharesCount, setSharesCount] = useState(0);
   const [shared, setShared] = useState(false);
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
   const postComments = useAppSelector((state) => state.post.postComments);
@@ -102,6 +103,23 @@ const CommentsAndLikes = ({
   }, [postComments]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
+    const getPostSharesCount = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:7000/api/posts/getSharesCount/${postId}`
+        );
+
+        console.log(response.data);
+        setSharesCount(response.data.shares_count);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getPostSharesCount();
+  }, [postId]);
+
+  useEffect(() => {
     const getPostLikesCount = async () => {
       try {
         const response = await axios.get(
@@ -153,8 +171,8 @@ const CommentsAndLikes = ({
         </button>
 
         <button className="flex space-x-1 hover:text-blue-500">
-          <span>0</span>
-          <span>Shares</span>
+          <span>{sharesCount}</span>
+          <span>{sharesCount > 1 ? "Shares" : "Share"}</span>
         </button>
       </div>
 
