@@ -34,9 +34,12 @@ export const createNotification = createAsyncThunk(
           `http://localhost:7000/api/notification/createNotification/${receiverId}/${postId}`,
           { type }
         );
-      } else {
+        return;
+      }
+
+      if (!postId) {
         await axios.post(
-          `http://localhost:7000/api/notification/createNotification/${receiverId}`,
+          `http://localhost:7000/api/notification/createNotification/${receiverId}/${null}`,
           { type }
         );
       }

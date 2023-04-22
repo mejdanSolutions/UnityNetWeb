@@ -2,10 +2,7 @@ import React, { useEffect } from "react";
 
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import {
-  getFriendRequests,
-  getFriendRequestsCount,
-} from "../redux/friendRequestSlice";
+import { getFriendRequests } from "../redux/friendRequestSlice";
 import {
   createNotification,
   sendNotification,
@@ -22,6 +19,7 @@ const FriendRequests = ({ setReqOpen }: Props) => {
 
   const acceptRequestHandler = async (requestId: number) => {
     try {
+      console.log("requestId", requestId);
       await axios.get(
         `http://localhost:7000/api/followers/acceptFriendRequest/${requestId}`
       );
@@ -42,8 +40,9 @@ const FriendRequests = ({ setReqOpen }: Props) => {
         createNotification({ receiverId: requestId, type: "friendRequest" })
       );
       dispatch(getFriendRequests());
-      dispatch(getFriendRequestsCount());
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -51,10 +50,6 @@ const FriendRequests = ({ setReqOpen }: Props) => {
       setReqOpen(false);
     });
   });
-
-  useEffect(() => {
-    dispatch(getFriendRequests());
-  }, [dispatch]);
 
   return (
     <div className="absolute top-[3.2rem] right-[-4rem] bg-white text-black shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-md p-2 z-20">

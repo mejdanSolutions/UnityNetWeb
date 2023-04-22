@@ -4,7 +4,7 @@ import socket from "../services/socket";
 import { User } from "../types/types";
 
 interface Request {
-  request: number;
+  senderId: number;
   receiverId: number;
 }
 
@@ -21,27 +21,12 @@ export const getFriendRequests = createAsyncThunk(
   }
 );
 
-export const getFriendRequestsCount = createAsyncThunk(
-  "auth/getFriendRequestsCount",
-  async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:7000/api/followers/getFriendRequestsCount`
-      );
-
-      return response.data;
-    } catch (err) {}
-  }
-);
-
 interface InitialState {
   requests: User[];
-  requestCount: number;
 }
 
 const initialState: InitialState = {
   requests: [],
-  requestCount: 0,
 };
 
 // export const sendFriendRequest = createAsyncThunk(
@@ -51,9 +36,11 @@ const initialState: InitialState = {
 //   }
 // );
 
-export const sendFriendRequest = (receiverId: number) => (dispatch: any) => {
-  socket.emit("sendFriendRequest", { receiverId });
-};
+export const sendFriendRequest =
+  ({ senderId, receiverId }: Request) =>
+  (dispatch: any) => {
+    socket.emit("sendFriendRequest", { senderId, receiverId });
+  };
 
 // export const subscribeToFriendRequests = createAsyncThunk(
 //   "subscribeToFriendRequests",
@@ -88,10 +75,7 @@ const friendRequestSlice = createSlice({
   initialState,
   reducers: {
     saveReceivedRequest(state, action) {
-      state.requestCount += 1;
       state.requests.push(action.payload);
-
-      console.log("socket request count", state.requestCount);
     },
   },
   extraReducers: (builder) => {
@@ -101,10 +85,6 @@ const friendRequestSlice = createSlice({
         state.requests = action.payload;
       }
     );
-    builder.addCase(getFriendRequestsCount.fulfilled, (state, action) => {
-      state.requestCount = action.payload.requestCount;
-      console.log("backend request count", state.requestCount);
-    });
   },
 });
 
