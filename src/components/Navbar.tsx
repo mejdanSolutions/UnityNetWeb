@@ -32,7 +32,9 @@ const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [messagesOpen, setOpenMessages] = useState(false);
   const [openNotification, setOpenNotification] = useState(false);
-  const requestsCount = useAppSelector((state) => state.request.requestCount);
+  const requestsCount = useAppSelector(
+    (state) => state.request.requests
+  ).length;
   const notificationsCount = useAppSelector(
     (state) => state.notification.notificationCount
   );

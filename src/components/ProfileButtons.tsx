@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { sendFriendRequest } from "../redux/friendRequestSlice";
+import {
+  getFriendRequests,
+  sendFriendRequest,
+} from "../redux/friendRequestSlice";
 import { useAppDispatch } from "../redux/hooks";
 import { User } from "../types/types";
 import { useAppSelector } from "../redux/hooks";
 import { GrFormCheckmark } from "react-icons/gr";
+import {
+  createNotification,
+  sendNotification,
+} from "../redux/notificationSlice";
 
 interface Request {
   status: boolean;
@@ -25,26 +32,36 @@ const ProfileButtons = ({ setFriendStatus, friendStatus, userInfo }: Props) => {
     receiver: 0,
     sender: 0,
   });
+  const friendRequests = useAppSelector((state) => state.request.requests);
+  const notifications = useAppSelector(
+    (state) => state.notification.notifications
+  );
 
-  console.log("userId", userInfo.id);
+  console.log("friendReuqests", friendRequests);
 
-  console.log(friendReqStatus);
+  console.log(friendReqStatus, "friendReqStatus");
 
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
 
-  const acceptRequestHandler = async () => {
+  const getFriendStatus = async () => {
     try {
-      await axios.get(
-        `http://localhost:7000/api/followers/acceptFriendRequest/${friendReqStatus.sender}`
+      const response = await axios.get(
+        `http://localhost:7000/api/followers/checkFriendsStatus/${userInfo.id}`
       );
 
-      setFriendStatus(true);
-      setFriendReqStatus({ status: false, receiver: 0, sender: 0 });
-    } catch (err) {}
+      setFriendStatus(response.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const friendRequestHandler = async () => {
-    dispatch(sendFriendRequest(userInfo.id));
+    dispatch(
+      sendFriendRequest({
+        senderId: loggedUserInfo.id,
+        receiverId: userInfo.id,
+      })
+    );
 
     try {
       await axios.get(
@@ -52,7 +69,9 @@ const ProfileButtons = ({ setFriendStatus, friendStatus, userInfo }: Props) => {
       );
 
       getFriendReqStatus();
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const unfriendHandler = async () => {
@@ -61,7 +80,9 @@ const ProfileButtons = ({ setFriendStatus, friendStatus, userInfo }: Props) => {
         `http://localhost:7000/api/followers/removeFromFriends/${userInfo.id}`
       );
       setFriendStatus(false);
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const getFriendReqStatus = async () => {
@@ -71,28 +92,52 @@ const ProfileButtons = ({ setFriendStatus, friendStatus, userInfo }: Props) => {
       );
 
       setFriendReqStatus(response.data);
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
-    if (loggedUserInfo.id !== userInfo.id) {
+    if (userInfo) {
       getFriendReqStatus();
     }
-  }, [loggedUserInfo, userInfo]);
+  }, [friendRequests, notifications]);
 
   useEffect(() => {
-    const getFriendStatus = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:7000/api/followers/checkFriendsStatus/${userInfo.id}`
-        );
+    if (userInfo) {
+      getFriendStatus();
+    }
+  }, [userInfo, notifications]);
 
-        setFriendStatus(response.data);
-      } catch (err) {}
-    };
+  const acceptRequestHandler = async () => {
+    try {
+      await axios.get(
+        `http://localhost:7000/api/followers/acceptFriendRequest/${friendReqStatus.sender}`
+      );
+      dispatch(
+        sendNotification({
+          id: loggedUserInfo.id,
+          first_name: loggedUserInfo.first_name,
+          last_name: loggedUserInfo.last_name,
+          image: loggedUserInfo.image,
+          type: "friendRequest",
+          created_at: new Date(),
+          receiver_id: friendReqStatus.sender,
+          post_id: null,
+        })
+      );
+      dispatch(
+        createNotification({
+          receiverId: friendReqStatus.sender,
+          type: "friendRequest",
+        })
+      );
 
-    getFriendStatus();
-  }, [userInfo]);
+      getFriendStatus();
+      setFriendReqStatus({ status: false, receiver: 0, sender: 0 });
+      dispatch(getFriendRequests());
+    } catch (err) {}
+  };
 
   return (
     <div className="ml-5">
