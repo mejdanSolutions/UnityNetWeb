@@ -5,9 +5,10 @@ import axios from "axios";
 interface Props {
   setOpenSharePost: React.Dispatch<React.SetStateAction<boolean>>;
   postId: number;
+  sharedPostId?: number;
 }
 
-const SharePost = ({ setOpenSharePost, postId }: Props) => {
+const SharePost = ({ setOpenSharePost, postId, sharedPostId }: Props) => {
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
   const [description, setDescription] = useState("");
 
@@ -15,6 +16,17 @@ const SharePost = ({ setOpenSharePost, postId }: Props) => {
     e.preventDefault();
 
     try {
+      if (sharedPostId) {
+        await axios.post(
+          `http://localhost:7000/api/posts/sharePost/${sharedPostId}`,
+          {
+            description,
+          }
+        );
+        setDescription("");
+        return;
+      }
+
       await axios.post(`http://localhost:7000/api/posts/sharePost/${postId}`, {
         description,
       });

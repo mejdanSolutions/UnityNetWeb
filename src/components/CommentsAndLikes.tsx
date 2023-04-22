@@ -15,6 +15,7 @@ interface Props {
   setOpenComments: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenShares: React.Dispatch<React.SetStateAction<boolean>>;
   type?: string | null;
+  sharedPostId?: number;
 }
 
 const CommentsAndLikes = ({
@@ -24,6 +25,7 @@ const CommentsAndLikes = ({
   setOpenShares,
   userId,
   type,
+  sharedPostId,
 }: Props) => {
   const [openSharePost, setOpenSharePost] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -173,7 +175,11 @@ const CommentsAndLikes = ({
       </div>
 
       {openSharePost && (
-        <SharePost postId={postId} setOpenSharePost={setOpenSharePost} />
+        <SharePost
+          postId={postId}
+          sharedPostId={sharedPostId}
+          setOpenSharePost={setOpenSharePost}
+        />
       )}
     </div>
   );
