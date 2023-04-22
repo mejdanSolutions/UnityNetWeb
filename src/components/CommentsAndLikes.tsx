@@ -102,7 +102,6 @@ const CommentsAndLikes = ({
           `http://localhost:7000/api/posts/getSharesCount/${postId}`
         );
 
-        console.log(response.data);
         setSharesCount(response.data.shares_count);
       } catch (err) {
         console.log(err);
