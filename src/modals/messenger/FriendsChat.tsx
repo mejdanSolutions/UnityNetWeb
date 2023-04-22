@@ -32,9 +32,9 @@ const FriendsChat = () => {
   }, [loggedUserInfo]);
 
   return (
-    <div className="hidden md:block justify-self-end mt-5">
+    <div className="hidden md:block justify-self-end mt-5 bg-white rounded-md h-max w-[20rem] shadow-[0_3px_10px_rgb(0,0,0,0.2)] sticky top-[6rem]">
       <div className="flex items-center space-x-2 m-2 p-1">
-        <h2 className="font-bold">Contacts</h2>
+        <h2 className="font-bold text-2xl">Contacts</h2>
       </div>
 
       <div className="m-2 mt-5">
@@ -50,9 +50,9 @@ const FriendsChat = () => {
               );
             }}
             key={friend.id}
-            className="flex items-center justify-between hover:bg-gray-100 hover:cursor-pointer rounded-md p-1"
+            className="flex items-center justify-between hover:bg-gray-100 hover:cursor-pointer rounded-md p-1 mt-2"
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <img
                 src={friend.image || profileDefault}
                 alt=""

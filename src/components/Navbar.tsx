@@ -102,7 +102,7 @@ const Navbar = () => {
   }, [searchTerm]);
 
   return (
-    <div className="flex items-center justify-between border bg-white text-white p-3">
+    <div className="flex items-center justify-between border bg-white text-white p-3 sticky top-0 z-20">
       <div className="relative flex items-center space-x-2">
         <Link className="text-2xl text-blue-500 font-bold" to="/home">
           UN
