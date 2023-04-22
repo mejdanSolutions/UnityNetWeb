@@ -23,6 +23,9 @@ const Home = () => {
   const posts = useAppSelector((state) => state.post.posts);
   const chats = useAppSelector((state) => state.chat.chats);
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
+  const notifications = useAppSelector(
+    (state) => state.notification.notifications
+  );
 
   useEffect(() => {
     dispatch(getNotifications());
@@ -30,7 +33,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getNotificationsCount());
-  }, [dispatch]);
+  }, [dispatch, notifications]);
 
   useEffect(() => {
     dispatch(fetchPosts(page));
