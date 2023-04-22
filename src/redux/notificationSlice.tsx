@@ -53,6 +53,17 @@ export const getNotifications = createAsyncThunk(
   }
 );
 
+export const markNotificationAsRead = createAsyncThunk(
+  "notification/markNotificationAsRead",
+  async () => {
+    try {
+      await axios.put(
+        "http://localhost:7000/api/notification/markNotificationAsRead"
+      );
+    } catch (err) {}
+  }
+);
+
 export const subscribeToNotifications = () => (dispatch: any) => {
   socket.on("getNotification", (data) => {
     dispatch(notificationsActions.saveReceivedNotifications(data));
@@ -74,6 +85,9 @@ const notificationSlice = createSlice({
   reducers: {
     saveReceivedNotifications(state, action) {
       state.notifications.push(action.payload);
+    },
+    markNotificationsAsRead(state) {
+      state.notificationCount = 0;
     },
   },
   extraReducers: (builder) => {
