@@ -11,6 +11,7 @@ import SideBar from "../components/SideBar";
 import FriendsChat from "../modals/messenger/FriendsChat";
 
 import ChatBubble from "../cards/ChatBubble";
+import { getNotifications } from "../redux/notificationSlice";
 
 const Home = () => {
   const [page, setPage] = useState(1);
@@ -19,6 +20,10 @@ const Home = () => {
   const posts = useAppSelector((state) => state.post.posts);
   const chats = useAppSelector((state) => state.chat.chats);
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
+
+  useEffect(() => {
+    dispatch(getNotifications());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchPosts(page));

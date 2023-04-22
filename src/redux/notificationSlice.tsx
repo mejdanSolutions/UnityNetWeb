@@ -13,10 +13,12 @@ interface Args {
 
 interface InitialState {
   notifications: Notification[];
+  notificationCount: number;
 }
 
 const initialState: InitialState = {
   notifications: [],
+  notificationCount: 0,
 };
 
 export const createNotification = createAsyncThunk(
@@ -77,6 +79,7 @@ const notificationSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getNotifications.fulfilled, (state, action) => {
       state.notifications = action.payload;
+      state.notificationCount = action.payload.length;
     });
   },
 });
