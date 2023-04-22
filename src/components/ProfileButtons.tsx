@@ -44,7 +44,7 @@ const ProfileButtons = ({ setFriendStatus, friendStatus, userInfo }: Props) => {
   };
 
   const friendRequestHandler = async () => {
-    dispatch(sendFriendRequest({ request: 1, receiverId: userInfo.id }));
+    dispatch(sendFriendRequest(userInfo.id));
 
     try {
       await axios.get(

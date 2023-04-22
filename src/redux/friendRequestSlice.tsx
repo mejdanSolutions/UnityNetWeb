@@ -51,11 +51,9 @@ const initialState: InitialState = {
 //   }
 // );
 
-export const sendFriendRequest =
-  ({ request, receiverId }: Request) =>
-  (dispatch: any) => {
-    socket.emit("sendFriendRequest", { request, receiverId });
-  };
+export const sendFriendRequest = (receiverId: number) => (dispatch: any) => {
+  socket.emit("sendFriendRequest", { receiverId });
+};
 
 // export const subscribeToFriendRequests = createAsyncThunk(
 //   "subscribeToFriendRequests",
@@ -90,7 +88,8 @@ const friendRequestSlice = createSlice({
   initialState,
   reducers: {
     saveReceivedRequest(state, action) {
-      state.requestCount += action.payload;
+      state.requestCount += 1;
+      state.requests.push(action.payload);
 
       console.log("socket request count", state.requestCount);
     },
