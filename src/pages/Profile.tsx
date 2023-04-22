@@ -48,13 +48,16 @@ const Profile = () => {
     cover_image: "",
   });
   const [friendStatus, setFriendStatus] = useState(false);
+
   const posts = useAppSelector((state) => state.post.userPosts);
   const [friendReqStatus, setFriendReqStatus] = useState<Request>({
     status: false,
     receiver: 0,
     sender: 0,
   });
-  const [currentReqStatus, setCurrentReqStatus] = useState(false);
+
+  console.log(friendReqStatus);
+
   const [imageOpen, setImageOpen] = useState(false);
   const [openAddCoverPhoto, setOpenAddCoverPhoto] = useState(false);
   const [coverPhotoOpen, setOpenCoverPhoto] = useState(false);
@@ -96,19 +99,19 @@ const Profile = () => {
     dispatch(fetchUserPosts({ userId, page }));
   }, [page]);
 
+  const getFriendReqStatus = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:7000/api/followers/checkFriendRequestStatus/${userId}`
+      );
+
+      setFriendReqStatus(response.data);
+    } catch (err) {}
+  };
+
   useEffect(() => {
-    const getFriendReqStatus = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:7000/api/followers/checkFriendRequestStatus/${userInfo.id}`
-        );
-
-        setFriendReqStatus(response.data);
-      } catch (err) {}
-    };
-
     getFriendReqStatus();
-  }, [userInfo.id, currentReqStatus]);
+  }, []);
 
   const unfriendHandler = async () => {
     try {
@@ -123,7 +126,7 @@ const Profile = () => {
     const getFriendStatus = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:7000/api/followers/checkFriendsStatus"
+          `http://localhost:7000/api/followers/checkFriendsStatus/${userInfo?.id}`
         );
 
         setFriendStatus(response.data);
@@ -131,7 +134,7 @@ const Profile = () => {
     };
 
     getFriendStatus();
-  }, []);
+  }, [userId]);
 
   const friendRequestHandler = async () => {
     dispatch(sendFriendRequest({ request: 1, receiverId: userInfo.id }));
@@ -141,7 +144,7 @@ const Profile = () => {
         `http://localhost:7000/api/followers/sendFriendRequest/${userInfo.id}`
       );
 
-      setCurrentReqStatus(true);
+      getFriendReqStatus();
     } catch (err) {}
   };
 
@@ -239,7 +242,7 @@ const Profile = () => {
               !friendStatus &&
               friendReqStatus.status === false && (
                 <button
-                  onClick={friendRequestHandler}
+                  onClick={friendRequestHandler} //
                   type="submit"
                   className="bg-blue-500 text-white p-2 rounded-md font-bold hover:bg-blue-600"
                 >
