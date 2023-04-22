@@ -15,6 +15,7 @@ const initialState: InitialState = {
     first_name: "",
     last_name: "",
     image: "",
+    cover_image: "",
   },
 };
 
