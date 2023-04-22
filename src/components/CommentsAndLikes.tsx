@@ -31,21 +31,8 @@ const CommentsAndLikes = ({
   const [commentsCount, setCommentsCount] = useState(0);
   const [likesCount, setLikesCount] = useState(0);
   const [sharesCount, setSharesCount] = useState(0);
-  const [shared, setShared] = useState(false);
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
   const postComments = useAppSelector((state) => state.post.postComments);
-
-  useEffect(() => {
-    const isPostShared = async () => {
-      const response = await axios.get(
-        `http://localhost:7000/api/posts/isPostShared/${postId}`
-      );
-
-      setShared(response.data);
-    };
-
-    isPostShared();
-  }, [postId]);
 
   useEffect(() => {
     const isLiked = async () => {
