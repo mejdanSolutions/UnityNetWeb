@@ -68,7 +68,7 @@ const Post = ({
       {openLikes && (
         <UsersByLikes postId={postId} setOpenLikes={setOpenLikes} />
       )}
-      {openShares && (
+      {openShares && type !== "shared" && (
         <UsersByShares postId={postId} setOpenShares={setOpenShares} />
       )}
     </div>

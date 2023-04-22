@@ -123,6 +123,7 @@ const PostContent = ({
           setOpenComments={setOpenComments}
           setOpenLikes={setOpenLikes}
           setOpenShares={setOpenShares}
+          type={type}
         />
       </div>
     </div>
