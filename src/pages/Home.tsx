@@ -11,7 +11,10 @@ import SideBar from "../components/SideBar";
 import FriendsChat from "../modals/messenger/FriendsChat";
 
 import ChatBubble from "../cards/ChatBubble";
-import { getNotifications } from "../redux/notificationSlice";
+import {
+  getNotifications,
+  getNotificationsCount,
+} from "../redux/notificationSlice";
 
 const Home = () => {
   const [page, setPage] = useState(1);
@@ -23,6 +26,10 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getNotifications());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getNotificationsCount());
   }, [dispatch]);
 
   useEffect(() => {

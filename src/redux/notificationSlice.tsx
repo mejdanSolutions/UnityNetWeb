@@ -11,6 +11,10 @@ interface Args {
   postId?: number;
 }
 
+interface NotificationsCount {
+  notifications_count: number;
+}
+
 interface InitialState {
   notifications: Notification[];
   notificationCount: number;
@@ -64,6 +68,19 @@ export const markNotificationAsRead = createAsyncThunk(
   }
 );
 
+export const getNotificationsCount = createAsyncThunk(
+  "notification/getNotificationsCount",
+  async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:7000/api/notification/getNotificationsCount"
+      );
+
+      return response.data;
+    } catch (err) {}
+  }
+);
+
 export const subscribeToNotifications = () => (dispatch: any) => {
   socket.on("getNotification", (data) => {
     dispatch(notificationsActions.saveReceivedNotifications(data));
@@ -93,8 +110,13 @@ const notificationSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getNotifications.fulfilled, (state, action) => {
       state.notifications = action.payload;
-      state.notificationCount = action.payload.length;
     });
+    builder.addCase(
+      getNotificationsCount.fulfilled,
+      (state, action: PayloadAction<NotificationsCount>) => {
+        state.notificationCount = action.payload.notifications_count;
+      }
+    );
   },
 });
 
