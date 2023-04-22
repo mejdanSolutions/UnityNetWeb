@@ -44,7 +44,7 @@ const Home = () => {
         <SideBar />
 
         {open && <CreatePost setOpen={setOpen} />}
-        <main className="my-2 mx-auto max-w-[25rem] md:w-[33rem] md:max-w-[33rem]">
+        <main className="my-2">
           <div
             onClick={() => setOpen(true)}
             className="flex items-center space-x-2 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-4 mt-5 rounded-lg w-full"

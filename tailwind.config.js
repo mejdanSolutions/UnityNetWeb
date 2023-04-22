@@ -7,6 +7,12 @@ module.exports = {
   },
   theme: {
     extend: {},
+    screens: {
+      sm: "600px",
+      md: "800px",
+      lg: "1300px",
+      xl: "1280px",
+    },
   },
   plugins: [],
 };
