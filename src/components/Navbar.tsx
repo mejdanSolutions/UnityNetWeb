@@ -44,6 +44,7 @@ const Navbar = () => {
   const [searchSuggestions, setSearchSuggestions] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const arrivedMessages = useAppSelector((state) => state.chat.arrivedMessages);
 
   const handleSearch = useCallback(async (query: string) => {
     setIsLoading(true);
@@ -201,6 +202,13 @@ const Navbar = () => {
           >
             <BsMessenger size={19} className="text-blue-500" />
           </button>
+
+          {arrivedMessages.length !== 0 &&
+            arrivedMessages[0].sender_id !== loggedUserInfo.id && (
+              <span className="flex items-center justify-center absolute top-[-0.4rem] right-[-0.5rem] text-[0.8rem] w-[1rem] h-[1rem] bg-red-600 rounded-full">
+                {arrivedMessages.length}
+              </span>
+            )}
 
           {messagesOpen && <Messenger setOpenMessages={setOpenMessages} />}
         </div>

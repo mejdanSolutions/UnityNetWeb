@@ -3,7 +3,7 @@ import axios from "axios";
 import { Message, User } from "../../types/types";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import Conversation from "../../cards/Conversation";
-import { fetchMessages } from "../../redux/chatSlice";
+import { chatActions, fetchMessages } from "../../redux/chatSlice";
 import { Conversation as Conv } from "../../types/types";
 
 interface Props {
@@ -13,38 +13,14 @@ interface Props {
 const Messenger = ({ setOpenMessages }: Props) => {
   const [conversations, setConversations] = useState<Conv[]>([]);
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
-  // const [lastMessages, setLastMessages] = useState<Message[]>([]);
   const messages = useAppSelector((state) => state.chat.messages);
-
-  // useEffect(() => {
-  //   dispatch(fetchMessages(loggedUserInfo.id));
-  // }, [loggedUserInfo]);
-
-  // useEffect(() => {
-  //   const getLastMessages = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:7000/api/messages/getLastMessages`
-  //       );
-
-  //       setLastMessages(response.data);
-  //     } catch (err) {}
-  //   };
-
-  //   getLastMessages();
-  // }, [messages]);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    //   const getLastMessages = async () => {
-    //     try {
-    //       const response = await axios.get(
-    //         `http://localhost:7000/api/messages/getLastMessages`
-    //       );
+    dispatch(chatActions.deleteArrivedMessages());
+  }, [dispatch]);
 
-    //       setLastMessages(response.data);
-    //     } catch (err) {}
-    //   };
-
+  useEffect(() => {
     const getUserConversations = async () => {
       try {
         const response = await axios.get(
