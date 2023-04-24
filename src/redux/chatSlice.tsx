@@ -47,36 +47,15 @@ export const fetchMessages = createAsyncThunk(
   }
 );
 
-// export const subscribeToMessages = createAsyncThunk(
-//   "subscribeToMessages",
-//   async function () {
-//     window.socketClient.on("getMessage");
-//   }
-// );
-
 export const subscribeToMessages = () => (dispatch: any) => {
   socket.on("getMessage", (data) => {
     dispatch(chatActions.saveReceivedMessages(data));
   });
 };
 
-// export const unsubscribeFromMessages = createAsyncThunk(
-//   "unsubscribeFromMessages",
-//   async function () {
-//     window.socketClient.off("getMessage");
-//   }
-// );
-
 export const unsubscribeFromMessages = () => (dispatch: any) => {
   socket.off("getMessage");
 };
-
-// export const sendMessage = createAsyncThunk(
-//   "sendMessage",
-//   async function (message: Message, { dispatch }) {
-//     window.socketClient.emit("sendMessage", message);
-//   }
-// );
 
 export const sendMessage = (message: Message) => (dispatch: any) => {
   socket.emit("sendMessage", message);
@@ -95,13 +74,6 @@ export const getSeen = () => (dispatch: any) => {
 export const unsubscribeFromSeen = () => () => {
   socket.off("getSeen");
 };
-
-// export const addUser = createAsyncThunk(
-//   "addUser",
-//   async function (userId: number) {
-//     window.socketClient.emit("addUser", userId);
-//   }
-// );
 
 const chatSlice = createSlice({
   name: "chat",
