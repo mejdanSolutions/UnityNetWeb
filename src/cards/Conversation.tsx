@@ -82,7 +82,7 @@ const Conversation = ({
               className="text-[0.9rem]"
               style={
                 senderId !== loggedUserInfo.id && !seenAt
-                  ? { fontWeight: "bold" }
+                  ? { color: "#3B82F6", fontWeight: "bold" }
                   : {}
               }
             >
