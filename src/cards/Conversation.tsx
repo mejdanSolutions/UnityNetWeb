@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { RxDotFilled } from "react-icons/rx";
 import profileDefault from "../images/profile.jpg";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 import { Message } from "../types/types";
 import { chatActions } from "../redux/chatSlice";
+import { BiCheckDouble } from "react-icons/bi";
+import moment from "moment-timezone";
 
 interface Props {
   id: number;
@@ -14,6 +16,7 @@ interface Props {
   image: string | null;
   lastMessage: string | null;
   senderId: number | null;
+  seenAt: Date | null;
 }
 
 const Conversation = ({
@@ -24,10 +27,20 @@ const Conversation = ({
   conversationId,
   lastMessage,
   senderId,
+  seenAt,
 }: Props) => {
   const dispatch = useAppDispatch();
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
   const messages = useAppSelector((state) => state.chat.messages);
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleMouseOver = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+  };
 
   return (
     <div
@@ -45,32 +58,60 @@ const Conversation = ({
         );
       }}
       key={id}
-      className="flex items-center space-x-4 hover:bg-gray-100 rounded-md p-1 hover:cursor-pointer"
+      className="flex justify-between items-center space-x-4 hover:bg-gray-100 rounded-md p-1 hover:cursor-pointer"
     >
-      <div className="relative">
-        <img
-          className="border-2 w-[3rem] h-[3rem] rounded-full"
-          alt=""
-          src={image || profileDefault}
-        />
-        <RxDotFilled
-          size={30}
-          className="absolute bottom-[-0.3rem] right-[-0.7rem] text-green-600"
-        />
+      <div className="flex space-x-3">
+        <div className="relative">
+          <img
+            className="border-2 w-[3rem] h-[3rem] rounded-full"
+            alt=""
+            src={image || profileDefault}
+          />
+          <RxDotFilled
+            size={30}
+            className="absolute bottom-[-0.3rem] right-[-0.7rem] text-green-600"
+          />
+        </div>
+
+        <div className="">
+          <h3 className="font-bold">
+            {firstName} {lastName}
+          </h3>
+          {lastMessage && (
+            <span
+              className="text-[0.9rem]"
+              style={
+                senderId !== loggedUserInfo.id && !seenAt
+                  ? { fontWeight: "bold" }
+                  : {}
+              }
+            >
+              {senderId === loggedUserInfo.id
+                ? `You: ${lastMessage}`
+                : lastMessage}
+            </span>
+          )}
+        </div>
       </div>
 
-      <div className="">
-        <h3 className="font-bold">
-          {firstName} {lastName}
-        </h3>
-        {lastMessage && (
-          <span className="text-[0.9rem]">
-            {senderId === loggedUserInfo.id
-              ? `You: ${lastMessage}`
-              : lastMessage}
-          </span>
-        )}
-      </div>
+      {seenAt && senderId === loggedUserInfo.id && (
+        <div
+          className="relative"
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}
+        >
+          <BiCheckDouble className="text-blue-500" size={20} />
+
+          {isHovering && (
+            <div className="absolute bottom-4 right-0 w-max py-4 px-2 h-[1.5rem] text-[0.9rem] flex items-center justify-center text-white bg-black opacity-[0.6] rounded-md">
+              <span>
+                seen by {firstName} {lastName}{" "}
+                {moment(seenAt).tz("Europe/Sarajevo").fromNow()}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

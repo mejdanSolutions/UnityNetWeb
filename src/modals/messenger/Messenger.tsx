@@ -79,6 +79,7 @@ const Messenger = ({ setOpenMessages }: Props) => {
             lastMessage={user.last_message}
             image={user.image}
             senderId={user.sender_id}
+            seenAt={user.seen_at}
           />
         ))}
       </div>
