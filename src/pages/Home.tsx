@@ -8,7 +8,6 @@ import profileDefault from "../images/profile.jpg";
 import Navbar from "../components/Navbar";
 import Chat from "../modals/messenger/Chat";
 import SideBar from "../components/SideBar";
-import FriendsChat from "../modals/messenger/FriendsChat";
 import ChatBubble from "../cards/ChatBubble";
 
 const Home = () => {
@@ -18,10 +17,21 @@ const Home = () => {
   const posts = useAppSelector((state) => state.post.posts);
   const chats = useAppSelector((state) => state.chat.chats);
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
+  const notifications = useAppSelector(
+    (state) => state.notification.notifications
+  );
+  const isRemovedFromFriends = useAppSelector(
+    (state) => state.request.isRemovedFromFriends
+  );
 
   useEffect(() => {
-    dispatch(fetchPosts(page));
-  }, [dispatch, page]);
+    let ignore = false;
+    !ignore && dispatch(fetchPosts(page));
+
+    return () => {
+      ignore = true;
+    };
+  }, [dispatch, page, notifications, isRemovedFromFriends]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,7 +85,7 @@ const Home = () => {
             />
           ))}
         </main>
-        <FriendsChat />
+
         {chats.map(
           (chat) => chat.open && <Chat key={chat.userId} chatInfo={chat} />
         )}
