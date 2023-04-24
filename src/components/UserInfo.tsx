@@ -3,7 +3,7 @@ import PostOptions from "../modals/PostOptions";
 import { User } from "../types/types";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import moment from "moment";
+import moment from "moment-timezone";
 import { useAppSelector } from "../redux/hooks";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import profileDefault from "../images/profile.jpg";
@@ -62,7 +62,7 @@ const UserInfo = ({
             )}
           </h3>
           <span className="text-[0.9rem]">
-            {moment(createdAt, "YYYYMMDD").fromNow()}
+            {moment(createdAt).tz("Europe/Sarajevo").fromNow()}
           </span>
         </div>
       </div>

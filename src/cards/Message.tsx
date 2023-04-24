@@ -107,7 +107,7 @@ const Message = ({
             <div className="absolute bottom-4 right-0 w-max py-4 px-2 h-[1.5rem] text-[0.9rem] flex items-center justify-center text-white bg-black opacity-[0.6] rounded-md">
               <span>
                 seen by {firstName} {lastName}{" "}
-                {moment(lastSeen, "YYYYMMDD").fromNow()}
+                {moment(lastSeen).tz("Europe/Sarajevo").fromNow()}
               </span>
             </div>
           )}
