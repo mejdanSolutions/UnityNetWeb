@@ -41,6 +41,7 @@ export interface Conversation {
   image: string;
   last_message: string;
   sender_id: number;
+  seen_at: Date | null;
 }
 
 export interface IPostComment {

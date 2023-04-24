@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import {
   getFriendRequests,
+  onRemovedFromFriends,
+  removeFromFriendsList,
   sendFriendRequest,
 } from "../redux/friendRequestSlice";
 import { useAppDispatch } from "../redux/hooks";
@@ -36,66 +38,65 @@ const ProfileButtons = ({ setFriendStatus, friendStatus, userInfo }: Props) => {
   const notifications = useAppSelector(
     (state) => state.notification.notifications
   );
-
+  const isRemovedFromFriends = useAppSelector(
+    (state) => state.request.isRemovedFromFriends
+  );
   console.log("friendReuqests", friendRequests);
 
   console.log(friendReqStatus, "friendReqStatus");
 
   const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
 
-  const getFriendStatus = async () => {
+  const getFriendStatus = useCallback(async () => {
     try {
       const response = await axios.get(
         `http://localhost:7000/api/followers/checkFriendsStatus/${userInfo.id}`
       );
-
       setFriendStatus(response.data);
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [userInfo, setFriendStatus]);
 
-  const friendRequestHandler = async () => {
-    dispatch(
-      sendFriendRequest({
-        senderId: loggedUserInfo.id,
-        receiverId: userInfo.id,
-      })
-    );
-
+  const friendRequestHandler = useCallback(async () => {
     try {
       await axios.get(
         `http://localhost:7000/api/followers/sendFriendRequest/${userInfo.id}`
       );
-
+      dispatch(
+        sendFriendRequest({
+          senderId: loggedUserInfo.id,
+          receiverId: userInfo.id,
+        })
+      );
       getFriendReqStatus();
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [dispatch, loggedUserInfo.id, userInfo.id]);
 
-  const unfriendHandler = async () => {
+  const unfriendHandler = useCallback(async () => {
     try {
       await axios.get(
         `http://localhost:7000/api/followers/removeFromFriends/${userInfo.id}`
       );
+      dispatch(removeFromFriendsList(userInfo.id));
       setFriendStatus(false);
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [dispatch, userInfo.id, setFriendStatus]);
 
-  const getFriendReqStatus = async () => {
+  const getFriendReqStatus = useCallback(async () => {
     try {
       const response = await axios.get(
         `http://localhost:7000/api/followers/checkFriendRequestStatus/${userInfo.id}`
       );
-
       setFriendReqStatus(response.data);
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [userInfo]);
 
   useEffect(() => {
     if (userInfo) {
@@ -107,9 +108,9 @@ const ProfileButtons = ({ setFriendStatus, friendStatus, userInfo }: Props) => {
     if (userInfo) {
       getFriendStatus();
     }
-  }, [userInfo, notifications]);
+  }, [userInfo, notifications, isRemovedFromFriends]);
 
-  const acceptRequestHandler = async () => {
+  const acceptRequestHandler = useCallback(async () => {
     try {
       await axios.get(
         `http://localhost:7000/api/followers/acceptFriendRequest/${friendReqStatus.sender}`
@@ -137,7 +138,37 @@ const ProfileButtons = ({ setFriendStatus, friendStatus, userInfo }: Props) => {
       setFriendReqStatus({ status: false, receiver: 0, sender: 0 });
       dispatch(getFriendRequests());
     } catch (err) {}
-  };
+  }, [friendReqStatus, loggedUserInfo]);
+
+  // const acceptRequestHandler = async () => {
+  //   try {
+  //     await axios.get(
+  //       `http://localhost:7000/api/followers/acceptFriendRequest/${friendReqStatus.sender}`
+  //     );
+  //     dispatch(
+  //       sendNotification({
+  //         id: loggedUserInfo.id,
+  //         first_name: loggedUserInfo.first_name,
+  //         last_name: loggedUserInfo.last_name,
+  //         image: loggedUserInfo.image,
+  //         type: "friendRequest",
+  //         created_at: new Date(),
+  //         receiver_id: friendReqStatus.sender,
+  //         post_id: null,
+  //       })
+  //     );
+  //     dispatch(
+  //       createNotification({
+  //         receiverId: friendReqStatus.sender,
+  //         type: "friendRequest",
+  //       })
+  //     );
+
+  //     getFriendStatus();
+  //     setFriendReqStatus({ status: false, receiver: 0, sender: 0 });
+  //     dispatch(getFriendRequests());
+  //   } catch (err) {}
+  // };
 
   return (
     <div className="ml-5">
