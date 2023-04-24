@@ -74,6 +74,8 @@ export interface Chat {
   firstName: string;
   lastName: string;
   image: string;
+  lastMessage: string;
+  seenAt: Date | null;
 }
 
 export interface Message {
