@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import profileDefault from "../images/profile.jpg";
 import { AiOutlineClose } from "react-icons/ai";
-import { useAppDispatch } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { chatActions } from "../redux/chatSlice";
 import moment from "moment-timezone";
+import { Message } from "../types/types";
 
 interface Props {
   userId: number;
@@ -22,6 +23,9 @@ const ChatBubble = ({
 }: Props) => {
   const [isHovering, setIsHovering] = useState(false);
   const dispatch = useAppDispatch();
+  const arrivedMessages = useAppSelector((state) => state.chat.arrivedMessages);
+  const loggedUserInfo = useAppSelector((state) => state.auth.loggedUserInfo);
+  const [bubbleMessages, setBubbleMessages] = useState<Message[] | []>([]);
 
   const handleMouseOver = () => {
     setIsHovering(true);
@@ -30,6 +34,14 @@ const ChatBubble = ({
   const handleMouseOut = () => {
     setIsHovering(false);
   };
+
+  useEffect(() => {
+    setBubbleMessages(
+      arrivedMessages.filter(
+        (message) => message.receiverId === loggedUserInfo.id
+      )
+    );
+  }, [arrivedMessages, loggedUserInfo]);
 
   return (
     <div
@@ -55,6 +67,12 @@ const ChatBubble = ({
         alt=""
         className="w-[3rem] h-[3rem] border-2 rounded-[100%] hover:cursor-pointer my-2"
       />
+      {bubbleMessages.length !== 0 &&
+        bubbleMessages[0].sender_id === userId && (
+          <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-[1rem] h-[1rem] text-center flex items-center justify-center text-[0.8rem]">
+            {bubbleMessages.length}
+          </span>
+        )}
 
       {isHovering && (
         <>

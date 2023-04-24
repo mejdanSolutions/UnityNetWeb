@@ -110,6 +110,9 @@ const chatSlice = createSlice({
         chatExists.open = true;
       }
     },
+    deleteArrivedMessages(state) {
+      state.arrivedMessages = [];
+    },
     closeChat(state, action) {
       const filtered = state.chats.filter(
         (chat) => chat.userId !== action.payload

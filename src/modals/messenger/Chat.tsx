@@ -23,6 +23,10 @@ const Chat = ({ chatInfo }: Props) => {
   const [messageSent, setMessageSent] = useState(false);
   const chatWindowRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    dispatch(chatActions.deleteArrivedMessages());
+  }, [dispatch]);
+
   const scrollChatWindow = () => {
     if (chatWindowRef.current) {
       chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
