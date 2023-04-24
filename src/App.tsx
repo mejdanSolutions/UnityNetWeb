@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import { getLoggedUserInfo } from "./redux/authSlice";
 import {
   getFriendRequests,
+  onRemovedFromFriends,
   subscribeToFriendRequests,
   unsubscribeFromFriendRequests,
 } from "./redux/friendRequestSlice";
@@ -28,6 +29,7 @@ import {
   unsubscribeFromNotifications,
 } from "./redux/notificationSlice";
 import PreviewPost from "./pages/PreviewPost";
+import { friendRequestActions } from "./redux/friendRequestSlice";
 
 axios.defaults.withCredentials = true;
 
@@ -40,12 +42,28 @@ function App() {
     (state) => state.notification.notifications
   );
   const requests = useAppSelector((state) => state.request.requests);
+  const isRemovedFromFriends = useAppSelector(
+    (state) => state.request.isRemovedFromFriends
+  );
+
+  useEffect(() => {
+    // dispatch(onRemovedFromFriends());
+
+    socket.on("removedFromFriends", (data) => {
+      dispatch(friendRequestActions.removeFromFriends(data));
+    });
+
+    return () => {
+      socket.off("removedFromFriends");
+    };
+  }, [isRemovedFromFriends, dispatch]);
 
   // useEffect(() => {
   //   dispatch(getSeen());
 
   //   return () => dispatch(unsubscribeFromSeen());
   // }, [dispatch]);
+
   useEffect(() => {
     dispatch(getFriendRequests());
   }, [dispatch]);
