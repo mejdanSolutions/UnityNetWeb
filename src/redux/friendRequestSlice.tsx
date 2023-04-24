@@ -23,10 +23,12 @@ export const getFriendRequests = createAsyncThunk(
 
 interface InitialState {
   requests: User[];
+  isRemovedFromFriends: boolean;
 }
 
 const initialState: InitialState = {
   requests: [],
+  isRemovedFromFriends: false,
 };
 
 // export const sendFriendRequest = createAsyncThunk(
@@ -41,6 +43,17 @@ export const sendFriendRequest =
   (dispatch: any) => {
     socket.emit("sendFriendRequest", { senderId, receiverId });
   };
+
+export const removeFromFriendsList =
+  (receiverId: number) => (dispatch: any) => {
+    socket.emit("removeFromFriends", receiverId);
+  };
+
+export const onRemovedFromFriends = () => (dispatch: any) => {
+  socket.on("removedFromFriends", (data) => {
+    dispatch(friendRequestActions.removeFromFriends(data));
+  });
+};
 
 // export const subscribeToFriendRequests = createAsyncThunk(
 //   "subscribeToFriendRequests",
@@ -76,6 +89,11 @@ const friendRequestSlice = createSlice({
   reducers: {
     saveReceivedRequest(state, action) {
       state.requests.push(action.payload);
+    },
+    removeFromFriends(state, action) {
+      state.isRemovedFromFriends = action.payload;
+
+      console.log("reduxIsRemoved", state.isRemovedFromFriends);
     },
   },
   extraReducers: (builder) => {
