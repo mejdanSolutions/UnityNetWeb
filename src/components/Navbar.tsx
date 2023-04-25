@@ -32,9 +32,7 @@ const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [messagesOpen, setOpenMessages] = useState(false);
   const [openNotification, setOpenNotification] = useState(false);
-  const requestsCount = useAppSelector(
-    (state) => state.request.requests
-  ).length;
+  const requestsCount = useAppSelector((state) => state.request.requests);
   const notificationsCount = useAppSelector(
     (state) => state.notification.notificationCount
   );
@@ -186,9 +184,9 @@ const Navbar = () => {
             <FaUserFriends size={22} className="text-blue-500" />
           </button>
 
-          {requestsCount !== 0 && (
+          {requestsCount.length !== 0 && (
             <span className="flex items-center justify-center absolute top-[-0.4rem] right-[-0.5rem] text-[0.8rem] w-[1rem] h-[1rem] bg-red-600 rounded-full">
-              {requestsCount}
+              {requestsCount.length}
             </span>
           )}
 
@@ -203,7 +201,7 @@ const Navbar = () => {
             <BsMessenger size={19} className="text-blue-500" />
           </button>
 
-          {arrivedMessages.length !== 0 &&
+          {arrivedMessages?.length !== 0 &&
             arrivedMessages[0].sender_id !== loggedUserInfo.id && (
               <span className="flex items-center justify-center absolute top-[-0.4rem] right-[-0.5rem] text-[0.8rem] w-[1rem] h-[1rem] bg-red-600 rounded-full">
                 {arrivedMessages.length}
@@ -219,7 +217,7 @@ const Navbar = () => {
               e.stopPropagation();
               setProfileOpen((prev) => !prev);
             }}
-            src={loggedUserInfo.image || profileDefault}
+            src={loggedUserInfo?.image || profileDefault}
             alt=""
             className="w-[2.5rem] h-[2.5rem] border-2 rounded-[100%] hover:cursor-pointer"
           />
